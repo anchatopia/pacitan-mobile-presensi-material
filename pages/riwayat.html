@@ -179,7 +179,10 @@
 
             if (latitude != null) {
                 setTimeout(function() {
-                    if(pratinjauMap) pratinjauMap.remove();
+                    if(pratinjauMap) {
+                        pratinjauMap.off();
+                        pratinjauMap.remove();
+                    }
                     pratinjauMap = L.map(pratinjauMapDom);
 
                     var target = L.latLng(latitude, longitude);
@@ -198,6 +201,14 @@
                         },200)
                     });
                     tileLayer.addTo(pratinjauMap);
+
+                    setTimeout(() => {
+                        if ($('#pratinjauSection .loading').is(':visible')) {
+                            $('#pratinjauSection .loading').fadeOut();
+                            pratinjauMap.invalidateSize();
+                            $('.pratinjau-map').html("Peta tidak dapat dimuat ...")
+                        }
+                    }, 5000);
                 },1000)
             } else {
                 $('#pratinjauMapDom').html('<div class="text-center mt-3 mb-3">Koordinat Kosong</div>')
