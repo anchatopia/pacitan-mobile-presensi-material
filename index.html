@@ -175,66 +175,59 @@
         var readyRun = false
         var dDate = new Date()
         var vj = Date.now();
+        let nip
+        let loginStatus
+        let passwdStatus
+        let passwdForm = 0
+        let numStatus = 0
+        const params = new URLSearchParams(window.location.search);
+        const test = params.get('tes');
+        var jadwalId
+        const mobileDevice = (window.deviceInfo?.brand && window.deviceInfo?.model) 
+                    ? `${window.deviceInfo.brand} ${window.deviceInfo.model}` 
+                    : 'Perangkat Tidak Dikenal';
+        var uid = (test == 't3st') ? 'XXXTEST' : (window.deviceInfo?.uniqueId ?? '');
+        var device = (test == 't3st') ? 'ADBTEST' : mobileDevice
 
-        (function() {
-            $('.tahun-text').text('Tahun ' + dDate.getFullYear());
-            const cssArr = ['assets/css/main.css', 'css/custom.css']
-            const cssLoads = []
-            const jsArr = ['js/app.js', 'assets/js/main.js'];
-            const jsLoads = []
-            
-            cssArr.forEach(function(file) {
-                const request = document.write('<link href="' + file + '?v=' + vj + '" rel="stylesheet">');
-                cssLoads.push(request)
+        $('.tahun-text').text('Tahun ' + dDate.getFullYear());
+        const vjParam = `?v=${vj}`;
+        const cssArr = ['assets/css/main.css', 'css/custom.css'];
+        const jsArr = ['js/app.js', 'assets/js/main.js'];
+
+        cssArr.forEach(file => {
+            $('<link>', {
+                rel: 'stylesheet',
+                type: 'text/css',
+                href: file + vjParam
+            }).appendTo('head');
+            console.log(file + vjParam)
+        });
+
+        const jsLoads = jsArr.map(file => $.getScript(file + vjParam));
+
+        $.when(...jsLoads).done(function() {
+
+            const pages = ['presensi', 'pratinjau', 'riwayat', 'cuti', 'konfigurasi'];
+            const pageLoads = pages.map(page => {
+                return $.get(`pages/${page}.html${vjParam}`, function(data) {
+                    $(".index-page").append(data);
+                });
             });
 
-            jsArr.forEach(function(file) {
-                const request = document.write('<script src="' + file + '?v=' + vj + '"><\/script>');
-                jsLoads.push(request)
-            });
-
-            $.when.apply($, cssLoads, jsLoads).done(function() {
-
-                const pages = ['presensi','pratinjau', 'riwayat', 'cuti', 'konfigurasi'];
-                const loads = [];
-
-                pages.forEach(page => {
-                    const request = $.get(`pages/${page}.html?v=${vj}`, function(data) {
-                        $(".index-page").append(data);
+            $.when(...pageLoads).done(function() {
+                $.get(`pages/wave.html${vjParam}`, function(data) {
+                    $("#frontContent").prepend(data);
+                    
+                    $.get(`pages/sign.html${vjParam}`, function(data) {
+                        $('#signArea').html(data);
+                        $("#preloader").fadeOut();
+                        readyRun = true;
                     });
-                    loads.push(request);
                 });
-
-
-                $.when.apply($, loads).done(function() {
-                    $.get(`pages/wave.html?v=${vj}`, function(data) {
-                        $("#frontContent").prepend(data);
-                        $.get(`pages/sign.html?v=${vj}`, function(data) {
-                            $('#signArea').html(data)
-                            $("#preloader").fadeOut()
-                            readyRun = true
-                        })
-                    })
-                });
-            })
-        })();
+            });
+        });
 </script>
 <script type="text/javascript">
-    let nip
-    let loginStatus
-    let passwdStatus
-    let passwdForm = 0
-    let numStatus = 0
-    const params = new URLSearchParams(window.location.search);
-    const test = params.get('tes');
-
-    var jadwalId
-    const mobileDevice = (window.deviceInfo?.brand && window.deviceInfo?.model) 
-                   ? `${window.deviceInfo.brand} ${window.deviceInfo.model}` 
-                   : 'Perangkat Tidak Dikenal';
-    var uid = (test == 't3st') ? 'XXXTEST' : (window.deviceInfo?.uniqueId ?? '');
-    var device = (test == 't3st') ? 'ADBTEST' : mobileDevice
-
   $(document).ready(function() {
       btnDown = function(i) {
         $(i).css('background','#ccc !important')

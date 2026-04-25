@@ -75,12 +75,12 @@ $('.cuti-filter span').on("mousedown touchstart", function() {
 $('.cuti-filter span').on("mouseup touchend", function() {
     $('#cutiBy').val($(this).attr('data-type'))
     $('.cuti-filter span').removeClass('active')
-    cutiList(nip)
+    cutiList()
     $(this).addClass('active')
     $(this).removeClass("filter-pressed");
 })
 
-cutiList = function(nip) {
+cutiList = function() {
      $.ajax({
         method: 'POST',
         url: mainUrl+'/api/mobile/cuti',
@@ -151,7 +151,9 @@ $('#jenisCuti').select2({
     }
 })
 
-if (nip != '') cutiList(nip)
+if (typeof nip !== 'undefined' && nip !== '') {
+    cutiList();
+}
 
 </script>
 
