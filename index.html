@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title></title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="components/jquery-ui/css/jquery-ui.css" rel="stylesheet">
+  <link href="components/calendar/jquery-ui.multidatespicker.css" rel="stylesheet">
+  <!--<link rel="stylesheet" href="components/growl/growl.css" type="text/css" media="all"> -->
+  <link rel="stylesheet" href="components/sweetalert/css/sweetalert.css" type="text/css" media="all">
+  <link href="components/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+  <div class="login-page"></div>
+  <div class="index-page" style="display: none">
+    <!-- Front Page -->
+    <input type="hidden" id="statBy" value="bulan">
+    <div id="header" class="header align-items-center fixed-top" >
+        <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+        <div class="logo d-flex align-items-center">
+            <img src="images/logo.png">
+            <h1>ePresensi<br>
+            <span>Mobile</span>
+            </h1>
+        </div>
+        <nav id="navmenu" class="navmenu">
+            <ul>
+            <li><a href="#" onclick="return appReload();"><i class="bi bi-arrow-clockwise"></i> Muat Ulang</a></li>
+            <li onclick="return logoutConfirm()">
+                <a onclick="return appLogout() " href="#"><i class="bi bi-arrow-bar-right"></i> Logout</a></li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+        </div>
+    </div>
+
+    <main class="main">
+    <section id="hero" class="hero section" style="position: relative; overflow: visible">
+        <div id="frontContent" style="background: #005301 !important; position: relative; width: 100%;">
+        
+        <div class="carousel-container container-section" style="position: absolute; top: 30px; z-index: 999; display: none" id="windowSection"></div>
+        <div class="carousel-container container-section" style="position: absolute; top: 0px;" id="mainSection">
+            <div class="flex-between island">
+                <div class="biodata">
+                    <div class='greeting'>Selamat Pagi</div>
+                    <div class="nama"></div>
+                    <div class="nip"></div>
+                </div>
+                <div class="now-refresh"><i class="bi bi-arrow-clockwise"></i> Muat</div>
+            </div>
+            <div id="signArea" class="card relative mb-1" style="padding-bottom: 0; padding-top: 5px;"></div>
+            <div style="width: 100%">
+                <div class="flex-between">
+                    <div class="filter stat-filter mb-1 mt-3">
+                        <span class="active" data-type="bulan">Bulan Ini</span>
+                        <span data-type="tahun" class="tahun-text">Tahun</span>
+                    </div>
+                    <div class="filter stat-refresh mb-1 mt-3">
+                        <span class="active text-green">
+                            <i class="bi bi-arrow-clockwise"></i> Muat
+                        </span>
+                    </div>
+                </div>
+            <div>
+            <div class="flex-between full-width">
+                <div class="bubble bubble-orange">
+                    <h1 class="stat-terlambat">0</h1>
+                    <span>Terlambat</span>
+                    <i class="bi bi-exclamation-diamond"></i>
+                </div>
+                <div class="bubble bubble-chocolate">
+                    <h1 class="stat-plgawal">0</h1>
+                    <span>Pulang Awal</span>
+                    <i class="bi bi-exclamation-diamond"></i>
+                </div>
+            </div>
+            <div class="flex-between full-width" style="margin-bottom: 100px">
+                <div class="bubble bubble-blue">
+                    <h1 class="stat-tp">0</h1>
+                    <span>Tidak Presensi</span>
+                    <i class="bi bi-clipboard2-x"></i>
+                </div>
+                <div class="bubble bubble-teal">
+                    <h1 class="stat-ijin">0</h1>
+                    <span>Ijin</span>
+                    <i class="bi bi-envelope-check"></i>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <div id="noApi" style="display: none">
+            <div class="text-center text-danger" style="padding-top: 30vh"><i class="bi bi-cone-striped" style="font-size: 40px"></i><br>API Tidak Aktif<br>
+            <p>[error]</p>
+            <a href="" onclick="loginCheck()" class="mt-5 btn-reserve noselect scrollto">
+                <i class="bi bi-arrow-clockwise"></i> Hubungkan Kembali</a>
+            </div>
+        </div>
+    </main>
+    <!-- End Front Page -->
+
+    <div class="nav-ribbon flex-between">
+      <a href="" class="nav-item" data-nav="dashboard"><i class="bi bi-person-bounding-box"></i><br>Presensi</a>
+      <a href="" class="nav-item" data-nav="riwayat"><i class="bi bi-clock-history"></i><br>Riwayat</a>
+      <a href="" class="nav-item" data-nav="cuti"><i class="bi bi-luggage"></i><br>Ijin/Cuti</a>
+      <a href="" class="nav-item" data-nav="konfigurasi"><i class="bi bi-gear"></i><br>Konfigurasi</a>
+    </div>
+    <div id="passwordSection">
+      <input type="hidden" value="" id="passwordType">
+      <div class="white-box">
+        <div class="flex-end hiding" id="passwdCloseBtn">
+          <div onclick="unsetPassword()" class="pointer"><span class="bi bi-x-lg"></span></div>
+        </div>
+        <h3 class='text-center mb-3'></h3>
+        <div class="alert alert-danger alert-passwd" style="display: none"></div>
+        <div class="hiding mb-3" id="pwdLamaInput">
+          <label class="text-muted">Password Lama</label>
+          <input type="password" class="form-control login-input" name="password_lama" id="pwdOld" onkeyup="return pwdHideAlert()"/>
+        </div>
+        <label class="text-muted">Password Baru</label>
+        <input type="password" class="form-control login-input" name="password" id="pwd1" onkeyup="return pwdHideAlert()"/>
+        <label class="text-muted mt-3">Ulang Password Baru</label>
+        <input type="password" class="form-control login-input" name="password2" id="pwd2" onkeyup="return pwdHideAlert()"/>
+        <p class="text-muted text-center mt-3 text-ket" style="line-height: 1em; padding: 10px 0">
+          *Setelah Password baru ini dibuat, maka untuk masuk ke Aplikasi setelah ini menggunakan password tersebut
+          <div class="flex-around">
+            <span id="passwordActBtn" class="mt-5 text-center btn-reserve btn-password noselect scrollto">Buat Password</span>
+          </div>
+        </p>
+        <div class="password-loader white-loader"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-list">
+    <div class="empty-content">
+      <div class="icon">
+          <i class="bi bi-layout-wtf" style="font-size: 5em"></i><br>
+          Tidak Ada Data ...
+      </div>
+    </div>
+</div>
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  
+  <!-- Preloader -->
+    <div id="preloader"></div>
+    <script src="components/jquery/js/jquery224.js"></script>
+    <script src="components/jquery-ui/js/jquery-ui.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script src="components/sweetalert/js/sweetalert.min.js"></script>
+    <script src="components/flatpickr/dist/flatpickr.min.js" ></script>
+    <script src="components/flatpickr/dist/l10n/id.js" ></script>
+
+    <script type="text/javascript">
+        var readyRun = false
+        var dDate = new Date()
+        var vj = Date.now();
+
+        (function() {
+            $('.tahun-text').text('Tahun ' + dDate.getFullYear());
+            const cssArr = ['assets/css/main.css', 'css/custom.css']
+            const cssLoads = []
+            const jsArr = ['conf.js','js/app.js', 'assets/js/main.js'];
+            const jsLoads = []
+            
+            cssArr.forEach(function(file) {
+                const request = document.write('<link href="' + file + '?v=' + vj + '" rel="stylesheet">');
+                cssLoads.push(request)
+            });
+
+            jsArr.forEach(function(file) {
+                const request = document.write('<script src="' + file + '?v=' + vj + '"><\/script>');
+                jsLoads.push(request)
+            });
+
+            $.when.apply($, cssLoads, jsLoads).done(function() {
+
+                const pages = ['presensi','pratinjau', 'riwayat', 'cuti', 'konfigurasi'];
+                const loads = [];
+
+                pages.forEach(page => {
+                    const request = $.get(`pages/${page}.html?v=${vj}`, function(data) {
+                        $(".index-page").append(data);
+                    });
+                    loads.push(request);
+                });
+
+
+                $.when.apply($, loads).done(function() {
+                    $.get(`pages/wave.html?v=${vj}`, function(data) {
+                        $("#frontContent").prepend(data);
+                        $.get(`pages/sign.html?v=${vj}`, function(data) {
+                            $('#signArea').html(data)
+                            $("#preloader").fadeOut()
+                            readyRun = true
+                        })
+                    })
+                });
+            })
+        })();
+</script>
+<script type="text/javascript">
+    var nip
+    var loginStatus
+    var passwdStatus
+    var passwdForm = 0
+    var numStatus = 0
+    const params = new URLSearchParams(window.location.search);
+    const test = params.get('tes');
+
+    var jadwalId
+    const mobileDevice = (window.deviceInfo?.brand && window.deviceInfo?.model) 
+                   ? `${window.deviceInfo.brand} ${window.deviceInfo.model}` 
+                   : 'Perangkat Tidak Dikenal';
+    var uid = (test == 't3st') ? 'XXXTEST' : (window.deviceInfo?.uniqueId ?? '');
+    var device = (test == 't3st') ? 'ADBTEST' : mobileDevice
+
+  $(document).ready(function() {
+      btnDown = function(i) {
+        $(i).css('background','#ccc !important')
+      }
+      $('.nav-item').click(function() {
+        $('.main-page').hide()
+        switch($(this).attr('data-nav')) {
+          case "konfigurasi":
+            $('.header,.main').hide();
+            $('.konfig-page').show()
+          break;
+          case "riwayat":
+            $('.header,.main').hide();
+            $('.riwayat-page').show();
+          break;
+          case "cuti":
+            $('.header,.main').hide();
+            $('.cuti-page').show();
+          break;
+          case "dashboard":
+            $('.header,.main').show();
+          break;
+        }
+        return false
+      })
+
+      $('#passwordActBtn').on("mousedown touchstart", function() {
+          $(this).addClass("btn-password-pressed")
+      });
+
+      $('#passwordActBtn').on("mouseup touchend", function() {
+          $(this).removeClass("btn-password-pressed")
+          setTimeout(function() {
+              savePassword()
+          },500)
+      });
+      
+  })
+  </script>
+  <script src="components/leaflet/leaflet.js"></script>
+<link rel="stylesheet" href="components/leaflet/leaflet.css" />
+<script type="text/javascript">
+
+mouseUpPress({'dom': '.stat-filter span', 'class': 'filter-pressed', 'callback': statFilterBy})
+function statFilterBy(val) {
+    $('#statBy').val($(val).attr('data-type'))
+    $('.stat-filter span').removeClass('active')
+    $(val).addClass('active')
+    statRefresh()
+}
+
+mouseUpPress({'dom': '.stat-refresh span', 'class': 'filter-pressed', 'callback': statRefresh})
+function statRefresh() {
+    const targets = $('.stat-terlambat, .stat-plgawal, .stat-tp, .stat-ijin');
+    const preData = [$('.stat-terlambat').text() ?? 0, $('.stat-plgawal').text() ?? 0,$('.stat-tp').text() ?? 0, $('.stat-ijin').text() ?? 0]
+    var tridotStatistik 
+    ajaxLoad({
+        type: 'POST',
+        loader: function() {
+            targets.text('...');   
+            targets.css('opacity', '0.3');
+            let dotCount = 0;
+            tridotStatistik = setInterval(function() {
+                dotCount = (dotCount + 1) % 4; 
+                let dots = ".".repeat(dotCount);
+                if (dotCount === 0) dots = "."; 
+                targets.text(dots);
+            }, 300);
+        },
+        unloader: function() {
+            clearInterval(tridotStatistik);
+            targets.css('opacity', 1);
+        },
+        data: {
+            'nip': getCookie('nip'),
+            'tipe': $('#statBy').val()
+        },
+        url: '/api/mobile/statistik',
+        callback: statRefreshOn,
+        rollback: function() {
+            clearInterval(tridotStatistik);
+            $('.stat-terlambat').text(preData[0])
+            $('.stat-plgawal').text(preData[1])
+            $('.stat-ijin').text(preData[2])
+            $('.stat-tp').text(preData[3])
+            targets.css('opacity', 1);
+        }
+    })
+}
+
+function statRefreshOn(e) {
+    $('.stat-terlambat').text(e.data.terlambat)
+    $('.stat-plgawal').text(e.data.pulangcepat)
+    $('.stat-ijin').text(e.data.ijin)
+    $('.stat-tp').text(e.data.abstain)
+}
+
+$('.now-refresh').on("mousedown touchstart", function() {
+    $(this).addClass("now-refresh-pressed")
+})
+
+$('.now-refresh').on("mouseup touchend", function() {
+    refreshPresensi()
+    $(this).removeClass("now-refresh-pressed");
+})
+
+loginRecheck = function() {
+   if (passwdStatus == 0) {
+    if (passwdForm == 0) setNewPassword()
+   } else $('#changePasswordBtn').show()
+
+   if (loginStatus == 0) doLogout()
+}
+
+let timer;
+
+function startCheck() {
+    timer = setInterval(function() {
+        loginRecheck()
+    }, 5000);
+}
+
+function stopCheck() {
+    clearInterval(timer)
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopCheck()
+    else startCheck()
+});
+
+const checkReady = setInterval(() => {
+    if (typeof readyRun !== 'undefined' && readyRun === true) {
+        const nip = getCookie('nip');
+        if (nip == null) loginCheck();
+        else loggedIn();
+        clearInterval(checkReady);
+    } 
+}, 1000);
+</script>
+</body>
+</html>

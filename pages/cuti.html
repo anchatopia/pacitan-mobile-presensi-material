@@ -1,0 +1,157 @@
+<input type="hidden" id="cutiBy" value="bulan">
+<div class="main-page carousel-container container-section cuti-page">
+    <div class="cuti-section">
+        <div class="flex-between">
+            <h1><i class="bi bi-luggage"></i> Ijin/Cuti</h1>
+            <div style="color: #aaa; font-size: 20px"><i class="bi bi-arrow-clockwise" onclick="return refreshRiwayat()"></i></div>
+        </div>
+        <div class="filter cuti-filter">
+            <span class="noselect active" data-type="bulan">Bulan Ini</span>
+            <span class="noselect" data-type="tahun">Tahun {{ date('Y') }}</span>
+        </div>
+        <div class="cuti-list"></div>
+    </div>
+    <div class="loading">
+        <svg width="60" height="20" viewBox="0 0 40 10" xmlns="http://www.w3.org/2000/svg" fill="#555">
+            <circle cx="5" cy="5" r="4">
+                <animate attributeName="opacity" dur="0.8s" values="1;0.2;1" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="20" cy="5" r="4">
+                <animate attributeName="opacity" dur="0.8s" begin="0.2s" values="1;0.2;1" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="35" cy="5" r="4">
+                <animate attributeName="opacity" dur="0.8s" begin="0.4s" values="1;0.2;1" repeatCount="indefinite"/>
+            </circle>
+        </svg>
+    </div>
+    <!--
+    <div class="cuti-btn" onclick="return cutiFormOpen()"><i class="bi bi-plus"></i></div>
+    -->
+</div>
+
+<div class="cuti-html" style="display: none">
+    <div class="card cuti-card">
+        <div class="flex-between">
+            <div class="title">[judul]</div>
+            <div class="tanggal">[tanggal]</div>
+        </div>
+        <div class="flex-between mt-2">
+            <div class="kiri">
+                <span class="ket">Mulai</span></br>
+                <span class="tgl-cuti">[mulai]</span>
+            </div>
+            <div class="kanan text-right">
+                <span class="ket">Selesai</span></br>
+                <span class="tgl-cuti">[selesai]</span>
+            </div>
+        </div>
+        <div class="flex-between mt-3">
+            <div class="keterangan">[keterangan]</div>
+            <div class="status [status]">[ket_status]</div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="components/select2/css/select2.min.css">
+<script src="components/select2/js/select2.full.min.js"></script>
+<script src="components/sweetalert/js/sweetalert.min.js"></script>
+<script type="text/javascript">
+
+    cutiFormOpen = function() {
+        $('.cuti-section, .cuti-btn').hide()
+        $('.cuti-form').fadeIn()
+    }
+
+    cutiClose = function() {
+        $('.cuti-section, .cuti-btn').show()
+        $('.cuti-form').hide()
+    }
+
+$('.cuti-list').css('height',($('.cuti-page').height()-100)+'px')
+$('.cuti-filter span').on("mousedown touchstart", function() {
+    $(this).addClass("filter-pressed")
+})
+
+$('.cuti-filter span').on("mouseup touchend", function() {
+    $('#cutiBy').val($(this).attr('data-type'))
+    $('.cuti-filter span').removeClass('active')
+    cutiList(nip)
+    $(this).addClass('active')
+    $(this).removeClass("filter-pressed");
+})
+
+cutiList = function(nip) {
+     $.ajax({
+        method: 'POST',
+        url: mainUrl+'/api/mobile/cuti',
+        cache: false,
+        data: {
+            nip: nip,
+            tipe: $('#cutiBy').val()
+        },
+        dataType: "json",
+        beforeSend: function() {
+            $('.cuti-page .loading').fadeIn()
+        },
+        success: function(result) {
+            if (result.status == true) { 
+                if (result.data.length > 0) {
+                    $('.cuti-list').html(null)
+                    for(let i = 0; i < result.data.length; i++) {
+                        var text = $('.cuti-html').html()
+                        domText = text.replace("[judul]",result.data[i].judul).replace("[tanggal]",result.data[i].tanggal).replace("[mulai]",result.data[i].mulai)
+                        domText = domText.replace("[selesai]",result.data[i].selesai).replace("[jumlah]",result.data[i].jml_hari).replace('[keterangan]',result.data[1].keterangan)
+                        switch(result.data[i].status) {
+                            case 1:
+                                domText = domText.replace("[status]","grey").replace("[ket_status]","Draft")
+                            break;
+                            case 2:
+                                domText = domText.replace("[status]","success").replace("[ket_status]","Diterima")
+                            break;
+                            case 3:
+                                domText = domText.replace("[status]","danger").replace("[ket_status]","Ditolak")
+                            break;                    
+                        }
+                        $('.cuti-list').append(domText)
+                    }
+                } else {
+                    $('.cuti-list').html($('.empty-list').html())
+                }
+                $('.cuti-page .loading').hide()
+            }
+        },error:function(xhr, ajaxOptions, thrownError){
+            console.log(JSON.stringify(xhr));
+        }
+    })
+}
+
+$('#jenisCuti').select2({
+    width: '100%',
+    dropdownParent: $(".cuti-form"),
+    placeholder: 'Cari Cuti',
+    ajax: {
+        url: baseUrl+'/api/cuti/dropdown',
+        dataType: 'json',
+        type: "GET",
+        async:true,
+        crossDomain:true,
+        data: function (q) {
+            var param = {
+                term: q.term
+            }
+            return param
+        },
+        processResults: function (data) {
+        return {
+            results:  $.map(data, function (item) {
+                return {  id: item.id, text: item.text }
+            })
+        }
+        },
+    }
+})
+
+if (nip != '') cutiList(nip)
+
+</script>
+

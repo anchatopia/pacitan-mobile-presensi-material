@@ -1,0 +1,97 @@
+<style type="text/css">
+    .login-footer { width: 100%; position: absolute; bottom: 20px; color: #aaa; text-align: center }
+</style>
+
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+    <div class="logo d-flex align-items-center">
+        <img src="images/logo.png">
+        <h1>ePresensi<br>
+        <span>Mobile</span>
+        </h1>
+    </div>
+    </div>
+</header>
+<main class="main">
+<section id="hero" class="hero section login-section" style="position: relative; overflow: visible">
+    <div style="background: #005301 !important; position: relative; width: 100%;">
+        <div style="height: 100px">&nbsp;</div>
+            <svg class="hero-waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28 " preserveAspectRatio="none">
+            <defs>
+                <path id="wave-path" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+            </defs>
+            <g class="wave1">
+                <use xlink:href="#wave-path" x="50" y="3"></use>
+            </g>
+            <g class="wave2">
+                <use xlink:href="#wave-path" x="50" y="0"></use>
+            </g>
+            <g class="wave3">
+                <use xlink:href="#wave-path" x="50" y="9"></use>
+            </g>
+            </svg>
+        </div>
+        
+        <div class="carousel-container container-section" style="position: absolute; top: 0px;" >
+        <div class="card" style="border: none; text-align: left">
+            <h3 class='text-center'>Masuk Aplikasi</h3>
+            <div class="alert alert-danger alert-login" style="display: none"></div>
+            <label>Username</label>
+            <input type="text" class="form-control login-input" name="username" id="username" onkeyup="return hideAlert()"/>
+            <label class="mt-3">Password</label>
+            <input type="password" class="form-control login-input" name="password" id="password" onkeyup="return hideAlert()"/>
+            <a href="#" onclick="return login()" class="mt-5 text-center btn-reserve btn-presensi-datang noselect scrollto">Masuk Aplikasi</a>
+        </div>
+    </div>
+    
+</section>
+<div class="login-footer">&copy 2026. ePresensi Mobile V1.0</div>
+</main>
+
+<script type="text/javascript">
+login = function() {
+    $('.index-page').css('opacity','1')
+    if (!$('#username').val()) {
+        $('.alert-login').html('Username harus diisi..').show()
+        return false
+    }
+    if (!$('#password').val()) {
+        $('.alert-login').html('Password harus diisi..').show()
+        return false
+    }
+    $.ajax({
+        method: 'POST',
+        url: mainUrl+'/api/mobile/login',
+        cache: false,
+        data: {
+            username: $('#username').val(),
+            password: $('#password').val(),
+            uid: uid,
+            device: device
+        },
+        dataType: "json",
+        beforeSend: function() {
+            $('.login-section').css("opacity","0.3")
+        },
+        success: function(result) {
+            if (result.status == true) {
+                initCookies(result)  
+                loggedIn()              
+            } else {
+                $('.alert-login').html(result.message).show()
+                $('.login-section').css("opacity","1")
+            }
+        },error:function(xhr, ajaxOptions, thrownError){
+            $('.alert-login').html(xhr.responseText).show()
+            $('.login-section').css("opacity","1")
+            console.log(JSON.stringify(xhr.responseText));
+        }
+    })
+    return false
+}
+
+hideAlert = function() {
+    $('.alert-login').html(null).hide()
+}
+
+</script>

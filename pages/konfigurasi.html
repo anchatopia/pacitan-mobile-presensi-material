@@ -1,0 +1,20 @@
+<div class="main-page konfig-page hiding" style="position: absolute; top: 0; width: 100%; height: calc(100vh); background: #fff">
+    <div style="padding: 25px">
+        <div class="flex-between"> 
+            <h1>Konfigurasi</h1>
+            <span class="muted num-refresh"></span>
+        </div>
+        <label class="mt-3">Nama Pegawai</label>
+        <input type="text" name="konfig_name" value="" class="form-control nama-input mt-1" readonly="readonly">
+        <label class="mt-3">NIP</label>
+        <input type="text" name="konfig_nip" value="" class="form-control nip-input mt-1" readonly="readonly">
+        <label class="mt-3">Device</label>
+        <input type="text" name="konfig_device" value="" class="form-control device-input mt-1" readonly="readonly">
+        <label class="mt-3">UID</label>
+        <input type="text" name="konfig_uid" value="" class="form-control uid-input mt-1" readonly="readonly">
+
+        <div class="flex-around">
+            <span onclick="return setChangePassword()" id="changePasswordBtn" class="mt-5 text-center btn-reserve btn-password noselect scrollto hiding">Ganti Password</span>
+        </div>
+    </div>
+</div>

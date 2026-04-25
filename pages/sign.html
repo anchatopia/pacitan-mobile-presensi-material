@@ -1,0 +1,186 @@
+<div class="flex-between full-width">
+    <div>Jadwal Hari ini</div>
+    <div class="tanggal-text"> .. </div>
+</div>
+<div class="weekend">
+    <h1>
+        <span class="bi bi-cup-hot"></span>
+        <p>Libur <span class="libur-text"></span></p>
+    </h1>
+</div>
+<div class="weekday">
+    <h1 class="text-center" style="font: 2em 'one-ui'; letter-spacing: -1px; color: #333">
+        <span class="jdw-masuk">__:__</span> - <span class="jdw-pulang">__:__</span>
+    </h1>
+    <div class="btn-presensi-section">
+        <!--  animate__fadeInUp scrollto -->
+        <span data-type="datang" data-title="Datang" class="btn-reserve btn-presensi-datang noselect" style="display: none">Presensi Datang</span>
+        <span data-type="pulang" data-title="Pulang" class="btn-reserve btn-presensi-pulang noselect" style="display: none">Presensi Pulang</span>
+    </div>
+    <h5>Presensi</h5>
+    <div class="flex-between" id="presensiNow">
+        <div class="presensi-now-left" data-type="masuk">
+            <div class="flex-start">
+                <div class="icon"><i class="bi bi-fullscreen"></i></div>
+                <div class="now-left">Datang</div>
+            </div> 
+            <span class="now-left-text">__:__</span>
+            <span class="left-info"></span>
+        </div>
+        <div class="presensi-now-right" data-type="pulang">
+            <div class="flex-start">
+                <div class="icon"><i class="bi bi-fullscreen"></i></div>
+                <div class="now-left">Pulang</div>
+            </div>
+            <span class="now-right-text">__:__</span>
+        </div>
+    </div>
+    <div class="error text-center">
+        <span><i class="bi bi-exclamation-circle" style="font-size: 3em"></i><br>Terjadi Kesalahan</span>
+
+        <div class="reload-presensi filter mt-5">
+            <span class="active">Coba Kembali</span>
+        </div>
+    </div>
+    <div class="now-loading"></div>
+</div>
+
+<script type="text/javascript">
+
+var prsMasuk
+var prsMasukTime
+var prsMasukData
+var prsPulang
+var prsPulangTime
+var prsPulangData
+var prsType
+var prsTitle
+
+let upClock;
+
+$(document).ready(function() {
+
+    mouseUpPress({'dom': '.reload-presensi span', 'class': 'filter-pressed', 'callback': presensiNow })
+
+    $('.btn-presensi-datang, .btn-presensi-pulang').on("mousedown touchstart", function() {
+        en = $(this).attr('data-type')
+        $(this).addClass(en+"-pressed")
+    });
+
+    $('.btn-presensi-datang, .btn-presensi-pulang').on("mouseup touchend", function() {
+        $('.now-loading').css('top','1px')
+        prsType = $(this).attr('data-type')
+        prsTitle = $(this).attr('data-title')
+        $(this).removeClass(prsType+"-pressed")
+        setTimeout(function() {
+            setPresensi()
+        },200)
+    });
+
+    $('.presensi-now-left').on("mousedown touchstart", function() {
+        if (prsMasuk == true) $(this).addClass('presensi-pressed')
+    })
+    
+    $('.presensi-now-right').on("mousedown touchstart", function() {
+        if (prsPulang == true) $(this).addClass('presensi-pressed')
+    })
+    
+    $('.presensi-now-left, .presensi-now-right').on("mouseup touchend", function() {
+        $(this).removeClass('presensi-pressed')
+        console.log(prsPulangTime)
+        if ((prsMasuk == true && prsMasukTime != false) || (prsPulang == true && prsPulangTime != false)) pratinjauShow($(this).attr('data-type'))
+    })
+})
+
+setNowSection = function(res) {
+
+    jadwalId = res.id
+    $('.btn-presensi-section').hide()
+    $('.libur-text,.left-info, .right-info').text(null)
+    $('.tanggal-text').text(res.tanggal)
+    if (res.weekend == true) {
+        $('.weekend').show()
+        $('.weekday').hide()
+        if (res.libur != '') $('.libur-text').text(res.libur)
+    } else {
+        $('.weekend').hide()
+        $('.jdw-masuk').text(res.jadwal_masuk)
+        $('.jdw-pulang').text(res.jadwal_pulang)
+        if (res.masuk_code == 1 || res.pulang_code == 1) {
+            $('.btn-presensi-section').fadeIn()
+            if (res.masuk_code == 1) $('.btn-presensi-section .btn-presensi-datang').show()
+            if (res.pulang_code == 1) $('.btn-presensi-section .btn-presensi-pulang').show()
+        }
+        $('.now-left-text').html(res.masuk != null? res.masuk : '__:__')
+        if (res.masuk_color != '') $('.now-left-text').css('color',res.masuk_color)
+        if (res.terlambat) $('.left-info').text('(Terlambat)')
+        if (res.masuk_icon != '') $('.presensi-now-left .icon i').attr('class','bi bi-'+res.masuk_icon) 
+        $('.now-right-text').html(res.pulang != null? res.pulang : '__:__')
+        if (res.pulang_color != '') $('.now-right-text').css('color',res.pulang_color)
+        if (res.pulangcepat) $('.right-info').text('(Pulang Cepat)')
+        if (res.pulang_icon != '') $('.presensi-now-right .icon i').attr('class','bi bi-'+res.pulang_icon) 
+        $('.weekday').show()
+        prsMasuk = res.geo_masuk
+        prsMasukTime = res.masuk != null ? res.masuk : false
+        prsMasukData = res.geo_masuk_data
+        prsPulang = res.geo_pulang
+        prsPulangTime = res.pulang != null ? res.pulang : false
+        prsPulangData = res.geo_pulang_data
+        passwdStatus = res.password
+        loginStatus = res.status
+        
+        setTimeout(() => {
+            $('.now-loading').css('top','-999px')
+        },200)
+    }
+}
+
+function updateClock() {
+    const now = new Date()
+    const hours = String(now.getHours()).padStart(2, '0')
+    const minutes = String(now.getMinutes()).padStart(2, '0')
+    $('.time-text').html(`${hours}:${minutes}`)
+}
+
+function setPresensiBtn() {
+    updateClock();
+    upClock = setInterval(updateClock, 5000);
+    setTimeout(() => {
+        $('#type').val(prsType)
+        $('#presensiBtnSection .type-text').html(prsTitle)
+        $('#presensiBtnSection .time-text')
+        $('#presensiPushBtn').html('Presensi '+prsTitle).addClass('btn-presensi-' + prsType).attr('data-type',prsType).css('opacity','1')
+        .promise()
+        .done(function() {
+            $('#btnLoader').html($('.material-wave').html()).css({'top':'1px', 'height': $('#presensiBtnSection').height()+100+'px'})
+        });
+    },200)
+}
+
+setPresensi = function() {
+    if ($('#presensiPushBtn').length === 0) {
+        const buttonPage = $.get(`pages/button.html?v=${vj}`, function(data) {
+            $('#windowSection').html(data)
+            $('#windowSection').show();
+            $('#mainSection').animate({'opacity' : '0.1'})
+        });
+        $.when.apply(buttonPage).done(function() {
+            setPresensiBtn()
+        })
+    } else {
+        $('#mainSection').animate({'opacity' : '0.1'})
+        $('#windowSection').show();
+        setPresensiBtn()
+        navigator.geolocation.getCurrentPosition(success, error);
+    }
+}
+
+unsetPresensi = function() {
+    clearInterval(upClock)
+    $('#mainSection').animate({'opacity' : '1'})
+    $('#windowSection').hide()
+    setTimeout(() => {
+        $('.now-loading').css('top','-999px')
+    },200)
+}
+</script>

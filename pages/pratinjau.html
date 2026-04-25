@@ -1,0 +1,108 @@
+<div class="carousel-container container-section hiding pratinjau-page" id="pratinjauSection">
+ <div class="card">
+    <div class="flex-between">
+        <h4>Presensi <span class="title-text"></span></h4>
+        <div onclick="pratinjauClose()" class="pointer"><span class="bi bi-x-lg"></span></div>
+    </div>
+    <h1 class="text-time text-center" style="font-size: 4.6em;"></h1>
+    
+    <div class="mt-3 text-left">Titik Alamat</div>
+    <div class="text-center locator"></div>
+    
+    <div class="mt-3 text-left">Peta</div>
+    <div id="pratinjauMapDom" class="pratinjau-map"></div>
+    <p class="mt-5 text-center">
+    <span class="btn-reserve btn-pratinjau scrollto noselect" id="pratinjauCloseBtn" onclick="return pratinjauClose()">Tutup</a>
+    <div class="loading">
+        <div style="width: 150px">
+        <svg width="40" height="10" viewBox="0 0 40 10" xmlns="http://www.w3.org/2000/svg" fill="#555">
+            <circle cx="5" cy="5" r="4">
+                <animate attributeName="opacity" dur="0.8s" values="1;0.2;1" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="20" cy="5" r="4">
+                <animate attributeName="opacity" dur="0.8s" begin="0.2s" values="1;0.2;1" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="35" cy="5" r="4">
+                <animate attributeName="opacity" dur="0.8s" begin="0.4s" values="1;0.2;1" repeatCount="indefinite"/>
+            </circle>
+            </svg>
+        </span>
+    </div>  
+</div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+let pratinjauMap
+var centerPoint
+var radius = 200
+    
+pratinjauShow = function(i) {
+    $('body').css('overflow','hidden')
+    $('.pratinjau-page .title-text').html(i == "masuk"?'Masuk':'Pulang')
+    $('.pratinjau-page .locator').html(i == "masuk"?prsMasukData.alamat:prsPulangData.alamat)
+    $('.pratinjau-page .text-time').html(i == "masuk"?prsMasukTime:prsPulangTime)
+    $('.pratinjau-page .loading').hide()
+
+    latitude = (i == "masuk"?prsMasukData.lat:prsPulangData.lat)
+    longitude = (i == "masuk"?prsMasukData.long:prsPulangData.long)
+
+    if (latitude != null) {
+        setTimeout(function() {
+            if(pratinjauMap) pratinjauMap.remove();
+            pratinjauMap = L.map(pratinjauMapDom);
+
+            var target = L.latLng(latitude, longitude);
+            //var target = L.latLng(-7.835318818651449, 110.36791699266422);
+            //var centerPoint = L.latLng(-8.193788733800162, 111.10259349238856)
+            pratinjauMap.setView(target, 15);
+            var center = pratinjauMap.getCenter();
+            L.marker(center).addTo(pratinjauMap);
+
+            tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?_=' + new Date().getTime(), {
+                crossOrigin: true,
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+            }).addTo(pratinjauMap);
+        },1000)
+    } else {
+        $('#pratinjauMapDom').html('<div class="text-center mt-3 mb-3">Koordinat Kosong</div>')
+    }
+    //console.log(isWithinRadius(7.835318818651449, 110.36791699266422,centerPoint,radius))
+
+    $('.pratinjau-page').show();
+}
+
+pratinjauClose = function(i) {
+    $('body').css('overflow','auto')
+    $('.pratinjau-page').hide();
+}
+
+isWithinRadius = function(pointLat, pointLng, centerPoint, radius) {
+    var testPoint = L.latLng(pointLat, pointLng);
+    var distanceFromCenter = testPoint.distanceTo(centerPoint); // Distance in meters
+
+    if (distanceFromCenter <= radius) {
+        return true; // The point is within 200 meters
+    } else {
+        return false; // The point is outside the radius
+    }
+}
+
+refreshPratinjau = function() {
+     tileLayer.eachTile(function(tile) {
+        var src = tile.src.split('?')[0];
+        tile.src = src + '?_=' + new Date().getTime();
+    });
+}
+
+
+$("#pratinjauCloseBtn").on("mousedown touchstart", function() {
+    $(this).addClass('btn-pratinjau-pressed')
+})
+    
+$('#pratinjauCloseBtn').on("mouseup touchend", function() {
+    $(this).removeClass('btn-pratinjau-pressed')
+})
+
+</script>

@@ -1,0 +1,59 @@
+<div class="presensi-html" style="display: none">
+<div class="card presensi-card" style="width: 100%">
+    <div class="flex-between date-section">[tanggal]</div>
+    <div class="flex-between">
+        <div style="width: 50%">
+            <div class="flex-between">
+                <div class="icon"><i class="bi [masuk_icon]"></i></div>
+                <div class="presensi-left">Datang<br>
+                <span class="presensi-text">[masuk]</span>
+                </div>
+            </div>
+        </div>
+        <div style="width: 45%">
+            <div class="flex-between">
+                <div class="icon">
+                    <i class="bi [pulang_icon]"></i>
+                </div>
+                <div class="presensi-right">Pulang<br>
+                    <span class="presensi-text">[pulang]</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+
+presensiNow = function() {
+    $.ajax({
+        method: 'POST',
+        url: mainUrl+'/api/mobile/presensi',
+        cache: false,
+        data: {
+            nip: nip,
+            uid: uid,
+            stat: $('#statBy').val()
+        },
+        dataType: "json",
+        beforeSend: function() {
+            $('.weekday .error').css('top','-999px')
+                $('.now-loading, .weekday .error').css({'height': $('#signArea').height()+100+'px'})
+                $('.now-loading').html($('.material-wave').html()).css('top','1px')
+            },
+        success: function(result) {
+            if (result.status == true) { 
+                setNowSection(result.data)
+            }
+            $('.now-loading').css('top','-999px')
+        },error:function(xhr, ajaxOptions, thrownError){
+            console.log('salah')
+            $('.weekday .error').css('top','1px')
+            $('.now-loading').css('top','-999px')
+        }
+    })
+}
+
+</script>

@@ -1,0 +1,148 @@
+<style type="text/css">
+    .time-text { font-family: var(--default-font); font-size: 4.6em; }
+    #locator {padding: 10px; border: 1px solid #ccc; border-radius: 8px; min-height: 60px; }
+    #osm-map { margin: 5px 0 10px 0; border-radius: 8px; border: 1px solid #ccc; height: 160px;}
+</style>
+
+ <input type="hidden" id="type" value=""/>
+ <input type="hidden" id="latitude" value=""/>
+ <input type="hidden" id="longitude" value=""/>
+ <div class="card" id="presensiBtnSection"style="background: #fff; position: relative; overflow: hidden">
+    <div class="flex-between">
+        <h4>Presensi <span class="type-text"></span></h4>
+        <div onclick="unsetPresensi()" class="pointer"><span class="bi bi-x-lg"></span></div>
+    </div>
+    <div id="buttonSection">
+        <h1 class="time-text">00:00</h1>
+        <div class="mt-3 text-left">Titik Alamat</div>
+        <div class="text-center" id="locator"></div>
+        
+        <div class="mt-3 text-left">Peta</div>
+        <div id="osm-map"></div>
+
+        Apakah ingin melakukan Presensi?
+        <p style="margin-top: 20px">
+        <span data-type="" class="btn-reserve scrollto noselect" id="presensiPushBtn" style="opacity: 0"></span>
+    </div>
+    <div id="btnLoader"></div>  
+</div>
+
+
+<script type="text/javascript">
+var n = 0
+let map
+
+function setButtonLoader() {
+   $('#btnLoader').css('top','1px')
+}
+
+function unsetButtonLoader() {
+    setTimeout(() => {
+        $('#btnLoader').css('top','-999px')
+    },1000)
+}
+
+$(document).ready(function() {
+    $('#presensiPushBtn').on("mousedown touchstart", function() {
+        en = $(this).attr('data-type')
+        $(this).addClass(en+"-pressed")
+    });
+
+    $("#presensiPushBtn").on("mouseup touchend", function() {
+        en = $(this).attr('data-type')
+        $(this).removeClass(en+"-pressed")
+        presensiPush(this)
+    });
+})
+
+function success(pos) {
+    $('#locator').html('Memuat ...')
+    var latitude = pos.coords.latitude;
+    var longitude = pos.coords.longitude;
+    $('#latitude').val(latitude)
+    $('#longitude').val(longitude)
+    setMap(latitude, longitude)
+}
+
+function setMap(latitude, longitude) {
+    setTimeout(function() {
+        var element = document.getElementById('osm-map');
+        const container = L.DomUtil.get('osm-map');
+
+        if (container !== null && container._leaflet_id !== undefined) {
+        } else {
+        map = L.map(element);
+        }
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var target = L.latLng(latitude, longitude);
+        map.setView(target, 14);
+        L.marker(target).addTo(map);
+
+        $.ajax({
+            /*url:  'https://geocode.maps.co/reverse?lat='+latitude +'&lon='+longitude+'&api_key=67eba7d127273851068020kfuf0d219',*/
+            url: 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+latitude +'&lon='+longitude,
+            cache: false,
+            dataType: "json",
+            beforeSend: function() {
+            
+            },
+            success: function(result) {
+                $('#locator').html(result.display_name)
+                unsetButtonLoader()
+            },error:function(xhr, ajaxOptions, thrownError){
+                console.log(JSON.stringify(xhr));
+                unsetButtonLoader()
+            }
+        })
+    },1000)
+}
+
+
+function error(err) {
+  console.warn('ERROR(${err.code}): ${err.message}');
+}
+
+function presensiPush(i) {
+    if ($('#latitude').val() != '' && $('#longitude').val() != '') {
+        setButtonLoader()
+        setTimeout(function() {
+            $(i).attr('disabled','disabled')
+        },200)
+        $.ajax({
+            type: 'POST',
+            url: mainUrl+'/api/mobile/stamp',
+            data: {
+                id: jadwalId,
+                nip: nip,
+                uid: uid,
+                device: device,
+                type: $('#type').val(),
+                latitude: $('#latitude').val(),
+                longitude: $('#longitude').val(),
+                alamat: $('#locator').html()
+            },
+            cache: false,
+            dataType: "json",
+            beforeSend: function() {
+                
+            },
+            success: function(result) {
+                swal({'type':'success', 'text': result.message, 'title': 'Pesan Berhasil'})
+                $('#windowSection').html(null)
+                $('#windowSection').hide()
+                refreshPresensi()
+                $('#mainSection').animate({'opacity' : '1'})
+            },error:function(xhr, ajaxOptions, thrownError){
+                console.log(JSON.stringify(xhr));
+            }
+        })
+    }
+}
+
+navigator.geolocation.getCurrentPosition(success, error);
+
+</script>

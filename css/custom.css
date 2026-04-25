@@ -1,0 +1,289 @@
+.relative { position: relative; overflow: hidden; }
+.form-control::placeholder { color: #aaa !important }
+.hiding { display: none; }
+.input-group-text { color: #999 !important }
+.text-time { font-family: 'one-ui'}
+.empty-list { display: none; }
+.empty-content { display: flex; justify-content: center; align-items: center; width: 100%; height: 70vh; }
+.empty-content .icon { color: #cdcdcd !important; text-align: center; width: 120px; }
+.cal-container .flatpickr-day.selected,
+.cal-container .flatpickr-day.startRange,
+.cal-container .flatpickr-day.endRange,
+.cal-container .flatpickr-day.selected.inRange,
+.cal-container .flatpickr-day.startRange.inRange,
+.cal-container .flatpickr-day.endRange.inRange,
+.cal-container .flatpickr-day.selected:focus,
+.cal-container .flatpickr-day.startRange:focus,
+.cal-container .flatpickr-day.endRange:focus,
+.cal-container .flatpickr-day.selected:hover,
+.cal-container .flatpickr-day.startRange:hover,
+.cal-container .flatpickr-day.endRange:hover,
+.cal-container .flatpickr-day.selected.prevMonthDay,
+.cal-container .flatpickr-day.startRange.prevMonthDay,
+.cal-container .flatpickr-day.endRange.prevMonthDay,
+.cal-container .flatpickr-day.selected.nextMonthDay,
+.cal-container .flatpickr-day.startRange.nextMonthDay,
+.cal-container .flatpickr-day.endRange.nextMonthDay {
+  background:#149fc2 !important;
+  border: none;
+}
+.cal-container .flatpickr-rContainer { width: 100%; }
+.cal-container .flatpickr-day {
+  min-width: 10% !important; 
+  border:  none;
+  border-radius: 8px !important; 
+  padding: 3px 12px;
+  margin: 5px 11px;
+}
+.cal-container .flatpickr-days, .dayContainer  { width: 100%; min-width: 100%; max-width:100%;}
+.cal-container .flatpickr-calendar { width: 100% }
+.main-page h1 { font-size: 1.6em; position: relative; border-bottom: 1px solid #eee; margin-bottom: 12px; padding-bottom: 10px} 
+.main-page h1 .bi { font-size: 1.1em; line-height: 10px; margin-right: 5px; margin-top: 120px; }
+.btn, .read-more { cursor: pointer; }
+.anggota-list li { padding: 10px 0; }
+
+.btn-get-started { background: #fff; color:rgb(18, 131, 159) !important; }
+.btn-get-started:hover { color: #fff !important; }
+.btn-menu { padding: 1px 8px; border-radius: 5px; }
+
+@media (max-width: 768px) {
+  .hero .carousel-container {
+    min-height: 100vh !important;
+  }
+
+  .hero h2 {
+    font-size: 28px;
+  }
+}
+
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.full-width { width: 100%; } 
+.pull-left { float: left; }
+.pull-right { float: right; }
+.cl { clear: both; }
+.flex-left { display: flex; justify-content: flex-start;}
+.flex-end { display: flex; justify-content: flex-end;}
+.flex-around { display: flex; justify-content: space-around;}
+.flex-between { display: flex; justify-content: space-between;}
+
+.dataTables_paginate {display: flex; justify-content: flex-end;}
+
+.mr-1 { margin-right: 0.7rem !important }
+.mr-2 { margin-right: 1.1rem !important }
+.mr-3 { margin-right: 1.5rem !important }
+.mr-4 { margin-right: 1.6rem !important }
+.mb-1 { margin-bottom: 0.7rem !important }
+.mb-3 { margin-bottom: 1.3rem !important }
+.text-muted { color: #777777 !important; }
+.dropdown-item:hover { background-color: #a54949 !important; color: #fff !important;  }
+.divider {border-bottom: 1px solid #aaa !important; width: 100%; margin-bottom: 10px; padding-bottom: 10px }
+.nav-ribbon { position: fixed; bottom: 0px; background-color: rgb(255, 255, 255, 0.9); font-size: 0.9em; width: 100%; height: 86px; border-top: 1px solid #aaa; padding: 20px 20px 22px 20px; z-index: 9999} 
+.nav-ribbon a { text-align: center; width: 20%; font-family: Raleway; font-size: .8em; font-weight: bold; line-height: 1.8em;}
+.nav-ribbon a i { font-size: 2.3em; }
+.logo h1 { line-height: 14px !important; font-size: 1.2em !important;}
+.logo h1 span { font-size: .6em ; letter-spacing: 4px; }
+.header { padding-top: 23px; padding-bottom: 10px; }
+.scrolled .header {padding-bottom: 10px; background-color: #004901}
+
+.island { margin-top: 15px; width: 100%; }
+.biodata { margin-top: 10px; }
+.biodata {font-size: 20px; line-height: 1.1em; text-align: left;}
+.biodata .greeting { font-family: 'Raleway';font-weight: 500; font-size: .9em}
+.biodata .nama { font-size: 1.2em; font-family: 'Raleway';font-weight: 700; }
+.biodata .nip { font-size: .7em; margin-top: 6px; }
+.now-refresh { width: 130px; padding: 3px 5px 3px 3px; border: 1px solid #3b813d; font-size: .9rem; height: 30px; border-radius: 40px; cursor: pointer; }
+.now-refresh-pressed { padding: 1px 3px 1px 1px !important; height: 25px; margin-top: 2px; border: 1px solid #e6e79a; color: #e6e79a }
+
+.card { padding: 15px; border: 1px solid #c5c5c5; border-radius: 10px; width: 100%; margin: 10px 10px 0 10px; background: rgba(255, 255, 255, 0.8); font-size: 0.9em;} 
+.title {  font-family: Raleway; font-weight:bold; color: #333; font-size: 0.9em;}
+a {font-family: Raleway; color: #036005 !important; font-size: 0.9em; }
+.scroll-top { background-color: #005301; bottom: 105px !important;  }
+.scroll-top i { color: #fff !important; }
+.container-section { width: 100%; padding: 20px; color: #fff; }
+.hero-waves { position: absolute !important; bottom: 0}
+.hero .wave1 use { animation: move-forever1 10s linear infinite; animation-delay: -2s; fill: #fff; opacity: 0.6; }
+.hero .wave2 use { animation: move-forever2 8s linear infinite; animation-delay: -2s; fill:  #fff; opacity: 0.4; }
+.hero .wave3 use { animation: move-forever3 6s linear infinite; animation-delay: -2s; fill:  #fff; }
+
+#presensiListLoad { display: none; width: 100%; margin-top: 30px; text-align: center; font-size: 1.3em; color: #333 }
+.presensi-card { margin-left: 0 !important; }
+.presensi-card .date-section { font-weight: bold; padding-bottom: 10px; }
+.jadwal { font-weight: 100 !important; padding-bottom: 10px; font-size: .9em; }
+.presensi-card { width: 30%; text-align: center; }
+.presensi-card .icon i { font-size: 3em; }
+.presensi-card .presensi-left { text-align: left; width: 60%;padding-top: 5px; border-right: 1px solid #ccc; }
+.presensi-card .presensi-right { text-align: left; width:60%;padding-top: 5px }
+.presensi-card .presensi-text { font-size: 1.6em; font-weight: bold; }
+.pratinjau-page { position: absolute; height: 1800px; background-color: rgb(0, 0, 0, 0.5); top: 0; z-index: 999; display: none; overflow: hidden; }
+.pratinjau-page .card { background: #fff; position: relative; overflow: hidden; margin: 0; padding: 10px; }
+.left-info, .right-info { color: #803737ff; margin-top: -20px; }
+.now-loading, #btnLoader, .weekday .error { width: 102%; display: flex; background-color: rgb(255,255,255,0.8); position: absolute;height: 50vh; top: -999px; left: 1px; justify-content: center; align-items: center; flex-direction: column; }
+
+.weekday .error { color: #803737ff; font-size: 1.1em; background-color: rgb(255,255,255,0.9); }
+.riwayat-list .error { width: 100%; display: flex;  justify-content: center; align-items: center; flex-direction: column; color : #803737ff; font-size: 1.1em;  }
+
+#presensiNow .icon i { font-size: 3.6em; }
+#presensiNow .now-left-text,  #presensiNow .now-right-text {font-size: 3.6em; font-weight: bold; }
+#passwordSection { display: none; width: 100%; height: 100vh; background: rgb(0,0,0,0.8); z-index: 9999; overflow: hidden; position: absolute; top: 0; left: 0; }
+
+.form-control { display: block; width: 100%; appearance: none; border: none;  border-bottom: 1px solid #aaa; border-radius: 0; padding-left: 0 }
+.form-control:focus { border-bottom: 1px solid #149fc2; box-shadow: none; }
+
+.cuti-btn { cursor: pointer; }
+.cuti-page, .cuti-form { position: absolute; top: 0; height: calc(100vh); background: #fff; display: none; }
+.cuti-card { width: auto; margin: 0 0 15px 0; line-height: 1.4em }
+.cuti-card .title { font-size: 1.3em; max-width: 60%; }
+.cuti-card .status { border-radius: 50px; font-size: 1em; color: #fff; padding: 2px 15px 3px; height: 29px; margin-top: 15px; }
+.cuti-card .success { color: #6daf7f; border: 1px solid #80ba8f}
+.cuti-card .grey { color: #aaa; border: 1px solid #cdcdcd; }
+.cuti-card .danger { color: #c77878; border: 1px solid #966161; }
+.cuti-page .loading, .riwayat-page .loading, .pratinjau-page .loading { width: 100%; display: flex; background-color: rgba(255, 255, 255, 0.8); height: 100vh; position: absolute; top: 0px; left: 0; justify-content: center; align-items: center; }
+.white-box { border: 1px solid #ccc; background: #fff; padding: 50px 20px; position: relative; overflow: hidden }
+.white-loader { background-color: rgb(255,255,255,0.6); width: 100%; position: absolute; top: 0; left: 0; height:500px; display: none; }
+
+.kanan, .kiri { width: 50%; }
+.ket { font-size: .9em; font-style: italic}
+.tgl-cuti { font-size: 16px; }
+.cuti-btn { position: absolute; bottom: 100px; right: 20px; background: #a20707ff; border: 3px solid #aa5c5cff;
+    border-radius: 50%; width: 60px; height: 60px; text-align: center; color: #fff; font-size: 40px; }
+.cuti-form { margin: 20px 20px 10px 0;  }
+.cuti-form label { color: #999; font-style: italic; font-weight: bold;}
+.saldo-cuti .item { width: 30%; height: 50px; color: #333; text-align: center; } 
+.saldo-cuti .item span { font-size: 1.8em; }
+
+/*-- Koreksi Page --*/
+/* .koreksi-page { display: none; } */
+.riwayat-card { width: auto; margin: 0 0 15px 0; line-height: 1.4em }
+.riwayat-card .date-section { font-weight: bold; padding-bottom: 10px; }
+.riwayat-card { width: 30%; text-align: center; }
+.riwayat-card .icon i { font-size: 3.1em; }
+.riwayat-card .riwayat-left { text-align: left; width: 65%;padding-top: 1px; border-right: 1px solid #ccc; }
+.riwayat-card .riwayat-right { text-align: left; width: 60%; padding-top: 2px }
+.riwayat-card .riwayat-text { font-size: 1.6em; font-weight: bold; }
+.red { color: #803737ff !important}
+
+.pointer { cursor: pointer; }
+.presensi-now-left { width: 50%; border-right: 1px solid #ccc; cursor: pointer}
+.presensi-now-right { width: 50%; cursor: pointer }
+.presensi-pressed {
+  color: #a37d15
+}
+.btn-presensi-section { height: 80px; padding-top: 15px; display: none; }
+.btn-reserve {
+    font-family: 'Raleway';
+    font-weight: 500;
+    font-size: 1.6em;
+    padding: 12px 32px;
+    border-radius: 50px;
+    margin: 20px 0;
+    transition: 0.2s;
+    color: #fff !important;
+    background-color: #666;
+} 
+
+.noselect {
+  user-select: none;       /* Standard */
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE/Edge lama */
+}
+/*
+    transition: 0.8s;
+    animation-delay: 0.3s; 
+  */
+
+.btn-presensi-datang, .btn-presensi-masuk, .btn-password, .btn-pratinjau { background-color: var(--accent-color); }
+.datang-pressed, .btn-pratinjau-pressed, .btn-password-pressed { background-color: #0099f8; padding: 8px 28px; }
+.btn-presensi-pulang { background-color: #74562f; }
+.pulang-pressed { background-color: #ff9100; padding: 8px 28px; }
+
+.weekend { display: none; }
+.weekend h1 { text-align: center; margin: 50px auto; }
+.weekend .bi { font-size: 2em; color: #444}
+@media (max-width: 1199px) {
+
+  .mobile-nav-active .mobile-nav-toggle {
+    color: #aaa;
+  }
+
+}
+
+.navmenu a i,.navmenu a i:hover {
+  background: none; color: #888; font-size: 20px;
+}
+
+.navmenu ul {
+  display: none;
+  position: absolute;
+  inset: 0 0 0 40%;
+  padding: 60px 0 0 0;
+  margin: 0;
+  background-color: var(--nav-mobile-background-color);
+  overflow-y: auto;
+  transition: 0.3s;
+  z-index: 9998;
+  box-shadow: none;
+}
+
+.navmenu ul li {
+  border-top: 1px solid #efefef; 
+}
+
+/* Button Presensi */
+.maps, .pratinjau-map { width: 100%; margin: 5px 0 10px 0; border-radius: 8px; border: 1px solid #ccc; height: 250px; z-index: 99 }
+.locator { padding: 10px; border: 1px solid #ccc; border-radius: 8px; min-height: 60px; }
+
+/* Riwayat */
+.riwayat-page { height: 100vh; }
+.riwayat-list { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 100px; }
+
+/* Cuti */
+.cuti-list { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 100px; }
+
+.filter { margin: 10px 0 30px 0; text-align: left;}
+.filter span { padding: 7px 20px 10px 20px; border: 1px solid #ccc; cursor: pointer; margin: 0 .3rem .1em 0; border-radius: 20px; color: #aaa; }
+.filter span.active { color: #036005; border-color: #036005}
+.filter-pressed { padding: 5px 18px 8px 18px !important; color: #bbbb6c !important; background-color: #eaea90 !important; border-color: #bbbb6c !important}
+
+/* Bubble */
+
+.bubble { margin-top: 10px; padding: 10px; width: 48%; border-radius: 5px 5px 5px 20px; text-align: left; position: relative }
+.bubble h1 { font: 2em 'one-ui' }
+.bubble .bi { position: absolute; top: 5px; right: 10px; color: #fff; opacity: 0.4; font-size: 2.5em; }
+.bubble-orange { background-color:#fec89a ; border: 2px solid #ffd8b6; color: #966f4b; border-bottom: 10px solid #ffd8b6 }
+.bubble-orange h1 { color: #966f4b }
+.bubble-teal { background-color:#b8e0d2; border: 2px solid #b8edda; border-bottom: 10px solid #b8edda}
+.bubble-teal, .bubble-teal h1 { color: #5c8376; }
+.bubble-blue { background-color:#afd0e8; border: 2px solid #cae1f2; border-bottom: 10px solid #cae1f2 } 
+.bubble-blue, .bubble-blue h1 { color: #6c889d }
+.bubble-chocolate { background-color:#d0b8ac ;  border: 2px solid #e4d3cb; border-bottom: 10px solid #e4d3cb } 
+.bubble-chocolate, .bubble-chocolate h1 { color: #8a7165 }
+
+/* -- Select2 -- */
+
+
+.select2-selection__placeholder { color: #1d5a7a !important; }
+.select2-results__option { color: #333; }
+.select2-selection__rendered { color: #333 !important; padding-left: 0 !important; }
+.select2-container--default .select2-selection--single {
+ background-color:#fff;
+ border: none;
+ border-bottom: 1px solid #aaa;
+ height: 38px;
+ border-radius:0;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+ height:33px;
+ position:absolute;
+ top:1px;
+ right:5px;
+ width:20px
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+ background-color: #fff;
+ border-radius: 10px;
+ padding:10px 10px 4px 10px;
+ color:#444;
+ line-height:16px
+}
