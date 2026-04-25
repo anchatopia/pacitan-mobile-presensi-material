@@ -58,7 +58,9 @@
 
     mouseUpPress({'dom': '.prs-filter span', 'class': 'filter-pressed', 'callback': riwayatRefresh})
     function riwayatRefresh(val) {
+        $('.prs-filter span').removeClass('active')
         $('#prsBy').val($(val).attr('data-type'))
+        $(val).addClass('active')
         riwayatList()
     }
 
@@ -82,7 +84,6 @@
             },
            success: function(result) {
                 if ($('#pratinjauSection .loading').html() == '') {
-                    console.log($('.material-wave').html())
                     $('#pratinjauSection .loading')
                     .html($('.material-wave').html())
                     .css({'top':'1px', 'min-heigt': '300px'})

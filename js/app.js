@@ -24,10 +24,10 @@ loggedIn = function() {
 
     nip = resultNip
     presensiNow(nip)
+    statRefresh()
     riwayatList(nip)
 
     /* -- Konfigurasi Load -- */
-    
     $('.nama-input').val(resultNama) 
     $('.nip-input').val(resultNip)
     $('.uid-input').val(uid)
