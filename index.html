@@ -183,6 +183,7 @@
         const params = new URLSearchParams(window.location.search);
         const test = params.get('tes');
         var jadwalId
+        let pratinjauMap
         const mobileDevice = (window.deviceInfo?.brand && window.deviceInfo?.model) 
                     ? `${window.deviceInfo.brand} ${window.deviceInfo.model}` 
                     : 'Perangkat Tidak Dikenal';

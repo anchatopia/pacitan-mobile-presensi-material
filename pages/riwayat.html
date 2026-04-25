@@ -26,100 +26,189 @@
     </div>
 </div>
 <div class="riwayat-html" style="display: none">
-<div class="card riwayat-card" style="width: 100%; padding-top: 10px">
-    <div class="flex-between date-section">
-        <span>[tanggal]</span>
-        <div class="jadwal">[jadwal_masuk] - [jadwal_pulang]</div>
-    </div>
-    <div class="flex-between">
-        <div style="width: 49%">
-            <div class="flex-between [terlambat]">
-                <div class="icon"><i class="bi [masuk_icon]"></i></div>
-                <div class="riwayat-left">Datang<br>
-                <span class="riwayat-text">[masuk]</span>
+    <div class="card riwayat-card" style="width: 100%; padding-top: 10px">
+        <div class="flex-between date-section">
+            <span>[tanggal]</span>
+            <div class="jadwal">[jadwal_masuk] - [jadwal_pulang]</div>
+        </div>
+        <div class="flex-between">
+            <div style="width: 49%">
+                <div class="flex-between [terlambat]" data-type="Datang"  data-alamat="[alamat_datang]">
+                    <div class="icon"><i class="bi [masuk_icon]"></i></div>
+                    <div class="riwayat-left">Datang<br>
+                    <span class="riwayat-text">[masuk]</span>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 43%" onclick="riwayatPratinjauShow(this)" data-type="Pulang" data-alamat="[alamat_pulang]">
+                <div class="flex-between [pulangawal]">
+                    <div class="icon">
+                        <i class="bi [pulang_icon]"></i>
+                    </div>
+                    <div class="riwayat-right">Pulang<br>
+                        <span class="riwayat-text">[pulang]</span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div style="width: 43%">
-            <div class="flex-between [pulangawal]">
-                <div class="icon">
-                    <i class="bi [pulang_icon]"></i>
-                </div>
-                <div class="riwayat-right">Pulang<br>
-                    <span class="riwayat-text">[pulang]</span>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
 </div>
 <script type="text/javascript">
-$('.riwayat-list').css('height',($('.riwayat-page').height()-100)+'px')
+    $('.riwayat-list').css('height',($('.riwayat-page').height()-100)+'px')
 
-mouseUpPress({'dom': '.prs-filter span', 'class': 'filter-pressed', 'callback': riwayatRefresh})
-function riwayatRefresh(val) {
-    $('#prsBy').val($(val).attr('data-type'))
-    riwayatList()
-}
-
-riwayatFormOpen = function() {
-    $('.riwayat-section, .riwayat-btn').hide()
-    $('.riwayat-form').fadeIn()
-}
-
-riwayatList = function() {
-     $.ajax({
-        method: 'POST',
-        url: mainUrl+'/api/mobile/yesterday',
-        cache: false,
-        data: {
-            nip: nip,
-            by: $('#prsBy').val()
-        },
-        dataType: "json",
-        beforeSend: function() {
-            $('.riwayat-page .loading').fadeIn()
-        },
-        success: function(result) {
-            if (result.status == true) { 
-                $('.riwayat-list').html(null)
-                for(let i = 0; i < result.data.length; i++) {
-                    var text = $('.riwayat-html').html()
-                    domText = text.replace("[tanggal]",result.data[i].tanggal_text)
-                    domText = domText.replace("[masuk]",result.data[i].masuk).replace('[terlambat]',(result.data[i].terlambat == "1"?'red':''))
-                    domText = domText.replace("[pulang]",result.data[i].pulang).replace('[pulangawal]',(result.data[i].pulangawal == "1"?'red':''))
-                    domText = domText.replace("[masuk_icon]",result.data[i].masuk_icon).replace("[pulang_icon]",result.data[i].pulang_icon)
-                    domText = domText.replace("[data_id]",result.data[i].id)
-                    domText = domText.replace("[jadwal_masuk]",result.data[i].jadwal_masuk)
-                    domText = domText.replace("[jadwal_pulang]",result.data[i].jadwal_pulang)
-                    $('.riwayat-list').append(domText)
-                }
-            }
-            
-            $('.riwayat-page .loading').fadeOut()
-        },error:function(xhr, ajaxOptions, thrownError){
-            $('.riwayat-page .loading').fadeOut()
-            $('.riwayat-list').html(`
-            <div class="error">
-                <p class="text-center"><i class="bi bi-exclamation-circle" style="font-size: 3em"></i><br>Terjadi Kesalahan</p>
-                <div class="filter mt-5" onclick="riwayatRefresh(this)">
-                    <span class="active">Coba Kembali</span>
-                </div>
-            </div>
-            `)
-
-        }
-     })
-}
-riwayatRefresh = function(e) {
-    $(e).find('span').addClass('filter-pressed')
-    setTimeout(() => {
-        $('.riwayat-list').html(null)
+    mouseUpPress({'dom': '.prs-filter span', 'class': 'filter-pressed', 'callback': riwayatRefresh})
+    function riwayatRefresh(val) {
+        $('#prsBy').val($(val).attr('data-type'))
         riwayatList()
-    },200)
-}
-riwayatClose = function() {
-    $('.riwayat-section, .riwayat-btn').show()
-    $('.riwayat-form').hide()
-}
+    }
+
+    riwayatFormOpen = function() {
+        $('.riwayat-section, .riwayat-btn').hide()
+        $('.riwayat-form').fadeIn()
+    }
+
+    riwayatList = function() {
+        $.ajax({
+            method: 'POST',
+            url: mainUrl+'/api/mobile/yesterday',
+            cache: false,
+            data: {
+                nip: nip,
+                by: $('#prsBy').val()
+            },
+            dataType: "json",
+            beforeSend: function() {
+                $('.riwayat-page .loading').fadeIn()
+            },
+           success: function(result) {
+                if ($('#pratinjauSection .loading').html() == '') {
+                    console.log($('.material-wave').html())
+                    $('#pratinjauSection .loading')
+                    .html($('.material-wave').html())
+                    .css({'top':'1px', 'min-heigt': '300px'})
+                }
+
+                if (result.status == true) {
+                    let listHtml = '';
+                    result.data.forEach(item => {
+                        const terlambatClass = item.terlambat == "1" ? 'red' : '';
+                        const pulangAwalClass = item.pulangawal == "1" ? 'red' : '';
+                        const geoMasuk = (item.geo_masuk == true) ? 1 : 0
+                        const geoPulang = (item.geo_pulang == true) ? 1 : 0
+                        listHtml += `
+                        <div class="card riwayat-card" style="width: 100%; padding-top: 10px">
+                            <div class="flex-between date-section">
+                                <span>${item.tanggal_text}</span>
+                                <div class="jadwal">${item.jadwal_masuk} - ${item.jadwal_pulang}</div>
+                            </div>
+                            <div class="flex-between">
+                                <div style="width: 49%" onclick="riwayatPratinjauShow(this)"
+                                        data-type="Datang"
+                                        data-geo="${geoMasuk}" 
+                                        data-waktu="${item.masuk_waktu}" 
+                                        data-alamat="${item.masuk_alamat}" 
+                                        data-lat="${item.masuk_lat}"  
+                                        data-long="${item.masuk_long}">
+                                    <div class="flex-between ${terlambatClass}">
+                                            <div class="icon"><i class="bi ${item.masuk_icon}"></i></div>
+                                            <div class="riwayat-left">Datang<br>
+                                                <span class="riwayat-text">${item.masuk}</span>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div style="width: 43%" onclick="riwayatPratinjauShow(this)"
+                                    data-type="Pulang"
+                                    data-geo="${geoPulang}" 
+                                    data-waktu="${item.pulang_waktu}"
+                                    data-alamat="${item.pulang_alamat}"
+                                    data-lat="${item.pulang_lat}" 
+                                    data-long="${item.pulang_long}">
+                                        <div class="flex-between ${pulangAwalClass}">
+                                            <div class="icon"><i class="bi ${item.pulang_icon}"></i></div>
+                                            <div class="riwayat-right">Pulang<br>
+                                                <span class="riwayat-text">${item.pulang}</span>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                    
+                    $('.riwayat-list').html(listHtml);
+                }
+                $('.riwayat-page .loading').fadeOut();
+            },error:function(xhr, ajaxOptions, thrownError){
+                $('.riwayat-page .loading').fadeOut()
+                $('.riwayat-list').html(`
+                <div class="error">
+                    <p class="text-center"><i class="bi bi-exclamation-circle" style="font-size: 3em"></i><br>Terjadi Kesalahan</p>
+                    <div class="filter mt-5" onclick="riwayatRefresh(this)">
+                        <span class="active">Coba Kembali</span>
+                    </div>
+                </div>
+                `)
+
+            }
+        })
+    }
+
+    riwayatRefresh = function(e) {
+        $(e).find('span').addClass('filter-pressed')
+        setTimeout(() => {
+            $('.riwayat-list').html(null)
+            riwayatList()
+        },200)
+    }
+    riwayatClose = function() {
+        $('.riwayat-section, .riwayat-btn').show()
+        $('.riwayat-form').hide()
+    }
+
+    riwayatPratinjauShow = function(dom) {
+
+        const e = $(dom)
+        if (e.attr('data-geo') == 1) {
+            $('#pratinjauSection .loading').show()
+            $('body').css('overflow','hidden')
+            $('.pratinjau-page .title-text').html(e.attr('data-type'))
+            $('.pratinjau-page .locator').html(e.attr('data-alamat'))
+            $('.pratinjau-page .text-time').html(e.attr('data-waktu'))
+
+            latitude = e.attr('data-lat')
+            longitude = e.attr('data-long')
+
+            if (latitude != null) {
+                setTimeout(function() {
+                    if(pratinjauMap) pratinjauMap.remove();
+                    pratinjauMap = L.map(pratinjauMapDom);
+
+                    var target = L.latLng(latitude, longitude);
+                    pratinjauMap.setView(target, 15);
+                    var center = pratinjauMap.getCenter();
+                    L.marker(center).addTo(pratinjauMap);
+
+                    tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?_=' + new Date().getTime(), {
+                        crossOrigin: true,
+                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+                    });
+
+                    tileLayer.on('load', function() {
+                        setTimeout(() => {
+                            $('#pratinjauSection .loading').fadeOut()
+                        },200)
+                    });
+                    tileLayer.addTo(pratinjauMap);
+                },1000)
+            } else {
+                $('#pratinjauMapDom').html('<div class="text-center mt-3 mb-3">Koordinat Kosong</div>')
+            }
+            $('.pratinjau-page').show();
+        }
+    }
+
+    function pratinjauClose(i) {
+        $('body').css('overflow','auto')
+        $('.pratinjau-page').hide();
+    }
+
 </script>

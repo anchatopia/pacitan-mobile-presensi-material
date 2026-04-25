@@ -54,7 +54,6 @@
 
 <link rel="stylesheet" type="text/css" href="components/select2/css/select2.min.css">
 <script src="components/select2/js/select2.full.min.js"></script>
-<script src="components/sweetalert/js/sweetalert.min.js"></script>
 <script type="text/javascript">
 
     cutiFormOpen = function() {
@@ -67,93 +66,92 @@
         $('.cuti-form').hide()
     }
 
-$('.cuti-list').css('height',($('.cuti-page').height()-100)+'px')
-$('.cuti-filter span').on("mousedown touchstart", function() {
-    $(this).addClass("filter-pressed")
-})
+    $('.cuti-list').css('height',($('.cuti-page').height()-100)+'px')
+    $('.cuti-filter span').on("mousedown touchstart", function() {
+        $(this).addClass("filter-pressed")
+    })
 
-$('.cuti-filter span').on("mouseup touchend", function() {
-    $('#cutiBy').val($(this).attr('data-type'))
-    $('.cuti-filter span').removeClass('active')
-    cutiList()
-    $(this).addClass('active')
-    $(this).removeClass("filter-pressed");
-})
+    $('.cuti-filter span').on("mouseup touchend", function() {
+        $('#cutiBy').val($(this).attr('data-type'))
+        $('.cuti-filter span').removeClass('active')
+        cutiList()
+        $(this).addClass('active')
+        $(this).removeClass("filter-pressed");
+    })
 
-cutiList = function() {
-     $.ajax({
-        method: 'POST',
-        url: mainUrl+'/api/mobile/cuti',
-        cache: false,
-        data: {
-            nip: nip,
-            tipe: $('#cutiBy').val()
-        },
-        dataType: "json",
-        beforeSend: function() {
-            $('.cuti-page .loading').fadeIn()
-        },
-        success: function(result) {
-            if (result.status == true) { 
-                if (result.data.length > 0) {
-                    $('.cuti-list').html(null)
-                    for(let i = 0; i < result.data.length; i++) {
-                        var text = $('.cuti-html').html()
-                        domText = text.replace("[judul]",result.data[i].judul).replace("[tanggal]",result.data[i].tanggal).replace("[mulai]",result.data[i].mulai)
-                        domText = domText.replace("[selesai]",result.data[i].selesai).replace("[jumlah]",result.data[i].jml_hari).replace('[keterangan]',result.data[1].keterangan)
-                        switch(result.data[i].status) {
-                            case 1:
-                                domText = domText.replace("[status]","grey").replace("[ket_status]","Draft")
-                            break;
-                            case 2:
-                                domText = domText.replace("[status]","success").replace("[ket_status]","Diterima")
-                            break;
-                            case 3:
-                                domText = domText.replace("[status]","danger").replace("[ket_status]","Ditolak")
-                            break;                    
+    cutiList = function() {
+        $.ajax({
+            method: 'POST',
+            url: mainUrl+'/api/mobile/cuti',
+            cache: false,
+            data: {
+                nip: nip,
+                tipe: $('#cutiBy').val()
+            },
+            dataType: "json",
+            beforeSend: function() {
+                $('.cuti-page .loading').fadeIn()
+            },
+            success: function(result) {
+                if (result.status == true) { 
+                    if (result.data.length > 0) {
+                        $('.cuti-list').html(null)
+                        for(let i = 0; i < result.data.length; i++) {
+                            var text = $('.cuti-html').html()
+                            domText = text.replace("[judul]",result.data[i].judul).replace("[tanggal]",result.data[i].tanggal).replace("[mulai]",result.data[i].mulai)
+                            domText = domText.replace("[selesai]",result.data[i].selesai).replace("[jumlah]",result.data[i].jml_hari).replace('[keterangan]',result.data[1].keterangan)
+                            switch(result.data[i].status) {
+                                case 1:
+                                    domText = domText.replace("[status]","grey").replace("[ket_status]","Draft")
+                                break;
+                                case 2:
+                                    domText = domText.replace("[status]","success").replace("[ket_status]","Diterima")
+                                break;
+                                case 3:
+                                    domText = domText.replace("[status]","danger").replace("[ket_status]","Ditolak")
+                                break;                    
+                            }
+                            $('.cuti-list').append(domText)
                         }
-                        $('.cuti-list').append(domText)
+                    } else {
+                        $('.cuti-list').html($('.empty-list').html())
                     }
-                } else {
-                    $('.cuti-list').html($('.empty-list').html())
+                    $('.cuti-page .loading').hide()
                 }
-                $('.cuti-page .loading').hide()
+            },error:function(xhr, ajaxOptions, thrownError){
+                console.log(JSON.stringify(xhr));
             }
-        },error:function(xhr, ajaxOptions, thrownError){
-            console.log(JSON.stringify(xhr));
+        })
+    }
+
+    $('#jenisCuti').select2({
+        width: '100%',
+        dropdownParent: $(".cuti-form"),
+        placeholder: 'Cari Cuti',
+        ajax: {
+            url: baseUrl+'/api/cuti/dropdown',
+            dataType: 'json',
+            type: "GET",
+            async:true,
+            crossDomain:true,
+            data: function (q) {
+                var param = {
+                    term: q.term
+                }
+                return param
+            },
+            processResults: function (data) {
+            return {
+                results:  $.map(data, function (item) {
+                    return {  id: item.id, text: item.text }
+                })
+            }
+            },
         }
     })
-}
 
-$('#jenisCuti').select2({
-    width: '100%',
-    dropdownParent: $(".cuti-form"),
-    placeholder: 'Cari Cuti',
-    ajax: {
-        url: baseUrl+'/api/cuti/dropdown',
-        dataType: 'json',
-        type: "GET",
-        async:true,
-        crossDomain:true,
-        data: function (q) {
-            var param = {
-                term: q.term
-            }
-            return param
-        },
-        processResults: function (data) {
-        return {
-            results:  $.map(data, function (item) {
-                return {  id: item.id, text: item.text }
-            })
-        }
-        },
+    if (typeof nip !== 'undefined' && nip !== '') {
+        cutiList();
     }
-})
-
-if (typeof nip !== 'undefined' && nip !== '') {
-    cutiList();
-}
-
 </script>
 
